@@ -1,4 +1,4 @@
-``c
+ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -210,6 +210,97 @@ void merge(int arr[], int low, int mid, int high)
 
 
 
+#include <stdio.h>
+
+#define MAX 20
+
+int parent[MAX];
+
+// Function to find parent
+int find(int i)
+{
+    while(parent[i])
+        i = parent[i];
+
+    return i;
+}
+
+// Function to perform union
+void uni(int i, int j)
+{
+    parent[j] = i;
+}
+
+int main()
+{
+    int n, i, j, a, b, u, v;
+    int min, mincost = 0;
+    int cost[MAX][MAX];
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter cost adjacency matrix:\n");
+
+    for(i = 1; i <= n; i++)
+    {
+        for(j = 1; j <= n; j++)
+        {
+            scanf("%d", &cost[i][j]);
+
+            // Replace 0 with large value
+            if(cost[i][j] == 0)
+                cost[i][j] = 999;
+        }
+    }
+
+    printf("\nEdges in Minimum Spanning Tree:\n");
+
+    int edges = 1;
+
+    while(edges < n)
+    {
+        min = 999;
+
+        // Find minimum edge
+        for(i = 1; i <= n; i++)
+        {
+            for(j = 1; j <= n; j++)
+            {
+                if(cost[i][j] < min)
+                {
+                    min = cost[i][j];
+
+                    a = u = i;
+                    b = v = j;
+                }
+            }
+        }
+
+        // Find parents
+        u = find(u);
+        v = find(v);
+
+        // If no cycle
+        if(u != v)
+        {
+            printf("%d Edge (%d,%d) = %d\n",
+                   edges, a, b, min);
+
+            mincost = mincost + min;
+
+            uni(u, v);
+
+            edges++;
+        }
+
+        cost[a][b] = cost[b][a] = 999;
+    }
+
+    printf("\nMinimum cost = %d\n", mincost);
+
+    return 0;
+}
 
 
 
@@ -224,7 +315,91 @@ void merge(int arr[], int low, int mid, int high)
 
 
 
+#include <stdio.h>
+
+#define MAX 20
+
+int main()
+{
+    int cost[MAX][MAX];
+    int visited[MAX];
+
+    int n, i, j;
+    int min, mincost = 0;
+    int a, b, u, v;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter cost adjacency matrix:\n");
+
+    // Read matrix
+    for(i = 1; i <= n; i++)
+    {
+        for(j = 1; j <= n; j++)
+        {
+            scanf("%d", &cost[i][j]);
+
+            // Replace 0 with large value
+            if(cost[i][j] == 0)
+                cost[i][j] = 999;
+        }
+    }
+
+    // Initialize visited array
+    for(i = 1; i <= n; i++)
+    {
+        visited[i] = 0;
+    }
+
+    visited[1] = 1;
+
+    printf("\nEdges in Minimum Spanning Tree:\n");
+
+    int edges = 1;
+
+    while(edges < n)
+    {
+        min = 999;
+
+        // Find minimum edge
+        for(i = 1; i <= n; i++)
+        {
+            if(visited[i] == 1)
+            {
+                for(j = 1; j <= n; j++)
+                {
+                    if(visited[j] == 0)
+                    {
+                        if(cost[i][j] < min)
+                        {
+                            min = cost[i][j];
+
+                            a = u = i;
+                            b = v = j;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Add edge to MST
+        printf("%d Edge (%d,%d) = %d\n",
+               edges, a, b, min);
+
+        mincost = mincost + min;
+
+        visited[b] = 1;
+
+        edges++;
+    }
+
+    printf("\nMinimum cost = %d\n", mincost);
+
+    return 0;
+}
 
 
 
-``
+
+ 
