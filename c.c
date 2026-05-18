@@ -1,4 +1,145 @@
- 
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char text[100];
+    char pattern[50];
+
+    int i, j;
+    int n, m;
+    int found = 0;
+
+    printf("Enter the text: ");
+    scanf("%s", text);
+
+    printf("Enter the pattern: ");
+    scanf("%s", pattern);
+
+    n = strlen(text);
+    m = strlen(pattern);
+
+    // Brute force matching
+    for(i = 0; i <= n - m; i++)
+    {
+        for(j = 0; j < m; j++)
+        {
+            if(text[i + j] != pattern[j])
+            {
+                break;
+            }
+        }
+
+        // Pattern found
+        if(j == m)
+        {
+            printf("Pattern found at position %d\n", i + 1);
+            found = 1;
+        }
+    }
+
+    if(found == 0)
+    {
+        printf("Pattern not found\n");
+    }
+
+    return 0;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main()
+{
+    int n, i, j;
+    int arr[20000];
+    int duplicate = 0;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    // Generate random numbers
+    for(i = 0; i < n; i++)
+    {
+        arr[i] = rand() % 10000;
+    }
+
+    clock_t start, end;
+
+    // Start time
+    start = clock();
+
+    // Check for duplicates
+    for(i = 0; i < n; i++)
+    {
+        for(j = i + 1; j < n; j++)
+        {
+            if(arr[i] == arr[j])
+            {
+                duplicate = 1;
+                break;
+            }
+        }
+
+        if(duplicate == 1)
+        {
+            break;
+        }
+    }
+
+    // End time
+    end = clock();
+
+    double time_taken;
+    time_taken = (double)(end - start) / CLOCKS_PER_SEC;
+
+    if(duplicate == 1)
+    {
+        printf("Duplicate elements found.\n");
+    }
+    else
+    {
+        printf("All elements are unique.\n");
+    }
+
+    printf("Time taken = %f seconds\n", time_taken);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include <stdio.h>
 #include <stdlib.h>
