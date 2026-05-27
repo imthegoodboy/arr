@@ -543,4 +543,455 @@ int main()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dijkstra’s Algorithm.
+
+#include <stdio.h>
+
+#define MAX 100
+#define INF 99999
+
+int main() {
+    int graph[MAX][MAX], n, source;
+    int distance[MAX], visited[MAX];
+    int i, j, min, u;
+
+    // Input number of vertices
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    // Input adjacency matrix
+    printf("Enter adjacency matrix:\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+
+            // Replace 0 with INF except diagonal
+            if(graph[i][j] == 0 && i != j) {
+                graph[i][j] = INF;
+            }
+        }
+    }
+
+    // Input source vertex
+    printf("Enter source vertex: ");
+    scanf("%d", &source);
+
+    // Initialize distance and visited arrays
+    for(i = 0; i < n; i++) {
+        distance[i] = graph[source][i];
+        visited[i] = 0;
+    }
+
+    distance[source] = 0;
+    visited[source] = 1;
+
+    // Dijkstra's Algorithm
+    for(i = 0; i < n - 1; i++) {
+
+        min = INF;
+
+        // Find nearest unvisited vertex
+        for(j = 0; j < n; j++) {
+            if(!visited[j] && distance[j] < min) {
+                min = distance[j];
+                u = j;
+            }
+        }
+
+        visited[u] = 1;
+
+        // Update shortest distances
+        for(j = 0; j < n; j++) {
+            if(!visited[j] &&
+               distance[u] + graph[u][j] < distance[j]) {
+
+                distance[j] = distance[u] + graph[u][j];
+            }
+        }
+    }
+
+    // Print shortest distances
+    printf("\nShortest distances from vertex %d:\n", source);
+
+    for(i = 0; i < n; i++) {
+        printf("To vertex %d = %d\n", i, distance[i]);
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+Topological Sort (Kahn’s Algorithm).
+
+#include <stdio.h>
+
+#define MAX 100
+
+int main() {
+    int n, graph[MAX][MAX];
+    int indegree[MAX] = {0};
+    int visited[MAX] = {0};
+    int i, j, count = 0;
+
+    // Input number of vertices
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    // Input adjacency matrix
+    printf("Enter adjacency matrix:\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+
+            // Calculate indegree
+            if(graph[i][j] == 1) {
+                indegree[j]++;
+            }
+        }
+    }
+
+    printf("\nTopological Ordering:\n");
+
+    // Find vertices with indegree 0
+    while(count < n) {
+
+        for(i = 0; i < n; i++) {
+
+            if(indegree[i] == 0 && !visited[i]) {
+
+                // Print vertex
+                printf("%d ", i);
+
+                visited[i] = 1;
+                count++;
+
+                // Reduce indegree of adjacent vertices
+                for(j = 0; j < n; j++) {
+                    if(graph[i][j] == 1) {
+                        indegree[j]--;
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\n");
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+0/1 Knapsack Problem using the Dynamic Programming method.
+
+#include <stdio.h>
+
+int max(int a, int b) {
+    if(a > b)
+        return a;
+    else
+        return b;
+}
+
+int main() {
+    int n, i, j, capacity;
+
+    // Input number of items
+    printf("Enter number of items: ");
+    scanf("%d", &n);
+
+    int weight[n], profit[n];
+
+    // Input weights
+    printf("Enter weights of items:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &weight[i]);
+    }
+
+    // Input profits
+    printf("Enter profits of items:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &profit[i]);
+    }
+
+    // Input knapsack capacity
+    printf("Enter capacity of knapsack: ");
+    scanf("%d", &capacity);
+
+    int dp[n + 1][capacity + 1];
+
+    // Build DP table
+    for(i = 0; i <= n; i++) {
+        for(j = 0; j <= capacity; j++) {
+
+            if(i == 0 || j == 0) {
+                dp[i][j] = 0;
+            }
+            else if(weight[i - 1] <= j) {
+
+                dp[i][j] = max(
+                    profit[i - 1] + dp[i - 1][j - weight[i - 1]],
+                    dp[i - 1][j]
+                );
+            }
+            else {
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+
+    // Print maximum profit
+    printf("\nMaximum Profit = %d\n", dp[n][capacity]);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+subset of a given set whose sum is equal to a given value using the Backtracking method.
+
+#include <stdio.h>
+
+int set[100], subset[100];
+int n, target, found = 0;
+
+// Function to find subsets
+void subsetSum(int sum, int k, int remaining) {
+
+    int i;
+
+    // If target sum is achieved
+    if(sum == target) {
+
+        found = 1;
+
+        printf("Subset found: ");
+
+        for(i = 0; i < k; i++) {
+            if(subset[i] == 1) {
+                printf("%d ", set[i]);
+            }
+        }
+
+        printf("\n");
+        return;
+    }
+
+    // Generate further subsets
+    for(i = k; i < n; i++) {
+
+        if(sum + set[i] <= target) {
+
+            subset[i] = 1;
+
+            subsetSum(sum + set[i], i + 1,
+                      remaining - set[i]);
+
+            subset[i] = 0;
+        }
+    }
+}
+
+int main() {
+
+    int i, total = 0;
+
+    // Input number of elements
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    // Input set elements
+    printf("Enter elements of the set:\n");
+
+    for(i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+        total += set[i];
+    }
+
+    // Input target sum
+    printf("Enter target sum: ");
+    scanf("%d", &target);
+
+    // Check possibility
+    if(target > total) {
+        printf("No subset possible.\n");
+        return 0;
+    }
+
+    // Initialize subset array
+    for(i = 0; i < n; i++) {
+        subset[i] = 0;
+    }
+
+    // Find subsets
+    subsetSum(0, 0, total);
+
+    if(!found) {
+        printf("No subset found.\n");
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The N-Queens problem places N queens on an N × N chessboard such that no two queens attack each other.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int board[20], count = 0;
+
+// Function to check whether queen can be placed
+int isSafe(int row, int col) {
+
+    int i;
+
+    for(i = 1; i < row; i++) {
+
+        // Check same column or diagonal attack
+        if(board[i] == col ||
+           abs(board[i] - col) == abs(i - row)) {
+
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+// Function to solve N-Queens problem
+void solve(int row, int n) {
+
+    int col, i, j;
+
+    // If all queens are placed
+    if(row > n) {
+
+        count++;
+
+        printf("\nSolution %d:\n\n", count);
+
+        for(i = 1; i <= n; i++) {
+
+            for(j = 1; j <= n; j++) {
+
+                if(board[i] == j)
+                    printf("Q ");
+                else
+                    printf(". ");
+            }
+
+            printf("\n");
+        }
+
+        return;
+    }
+
+    // Try placing queen in each column
+    for(col = 1; col <= n; col++) {
+
+        if(isSafe(row, col)) {
+
+            board[row] = col;
+
+            solve(row + 1, n);
+        }
+    }
+}
+
+int main() {
+
+    int n;
+
+    // Input number of queens
+    printf("Enter number of queens: ");
+    scanf("%d", &n);
+
+    solve(1, n);
+
+    if(count == 0) {
+        printf("No solutions found.\n");
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
  
