@@ -348,6 +348,7 @@ void merge(int arr[], int low, int mid, int high)
 
 
 
+ Kruskal's algorithm.
 
 
 
@@ -454,6 +455,7 @@ int main()
 
 
 
+ Prim's algorithm.
 
 
 #include <stdio.h>
